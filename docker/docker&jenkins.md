@@ -1,32 +1,34 @@
-2. ÏÂÔØjenkins docker image
-ÔÚhub.docker.com£¨https://hub.docker.com/r/jenkinsci/jenkins/£©ÉÏ¿ÉÒÔ¿´µ½jenkinsµÄimageµÄÏÂÔØ·½·¨¡£
-ÔÚÃüÁîĞĞÖ´ĞĞÈçÏÂÃüÁî½«ÏÂÔØjenkinsµÄimage£º
+### 1.ä¸‹è½½jenkins docker image
+åœ¨hub.docker.comï¼ˆhttps://hub.docker.com/r/jenkinsci/jenkins/ï¼‰ä¸Šå¯ä»¥çœ‹åˆ°jenkinsçš„imageçš„ä¸‹è½½æ–¹æ³•ã€‚
+åœ¨å‘½ä»¤è¡Œæ‰§è¡Œå¦‚ä¸‹å‘½ä»¤å°†ä¸‹è½½jenkinsçš„imageï¼š
 sudo docker pull jenkinsci/jenkins
  
-3. ÔËĞĞjenkins docker
-ÔÚÔËĞĞÖ®Ç°¿ÉÒÔÏÈ²é¿´jenkinsµÄdockerfile£¨https://github.com/jenkinsci/docker/blob/master/Dockerfile£©£¬Í¨¹ıjenkinsµÄdockerfile´ó¸Å¿ÉÒÔÁË½âjenkinsµÄdocker imageÀï°üº¬ºÍÉèÖÃÁËÊ²Ã´¡£
+### 2.è¿è¡Œjenkins docker
+åˆ›å»ºjenkins_home
+<pre><code> cd /home/USER_NAME</code><br>
+<code> mkdir jenkins_home_docker</code></pre> 
+
+å‡†å¤‡jenkinsçš„logé…ç½®æ–‡ä»¶ï¼š
+<pre><code>cd /home/<USER_NAME>/jenkins_home_docker</code><br></pre>
+<pre><code>cat > log.properties <<EOF <br>
+handlers=java.util.logging.ConsoleHandler<br>
+jenkins.level=FINEST<br>
+java.util.logging.ConsoleHandler.level=FINEST<br>
+EOF</code></pre>
  
-×¼±¸jenkinsµÄlogÅäÖÃÎÄ¼ş£º
-cd /home/osboxes/jenkins_home_docker
-cat > log.properties <<EOF
-handlers=java.util.logging.ConsoleHandler
-jenkins.level=FINEST
-java.util.logging.ConsoleHandler.level=FINEST
-EOF
+è¿è¡Œjenkinsçš„docker imageï¼š
+<pre><code>sudo docker run --name myjenkins -p 8088:8080 -p 50000:50000 -d --env JAVA_OPTS="-Xmx8192m" --env JAVA_OPTS="-Djava.util.logging.config.file=/home/USER_NAME/jenkins_home_docker/log.properties"  --env JENKINS_SLAVE_AGENT_PORT=50000 -v /home/USER_NAME/jenkins_home_docker:/var/jenkins_home  jenkinsci/jenkins</code></pre>
  
-ÔËĞĞjenkinsµÄdocker image£º
-sudo docker run --name myjenkins -p 8088:8080 -p 50000:50000 -d --env JAVA_OPTS="-Xmx8192m" --env JAVA_OPTS="-Djava.util.logging.config.file=/home/osboxes/jenkins_home_docker/log.properties"  --env JENKINS_SLAVE_AGENT_PORT=50000 -v /home/osboxes/jenkins_home_docker:/var/jenkins_home  jenkinsci/jenkins
+### 3ã€‚dockerå‘½ä»¤è¡Œè§£é‡Šï¼š
+dockerå®ä¾‹çš„åå­—ï¼š <code>--name myjenkins</code>ï¼Œæ­¤dockerå®ä¾‹çš„åå­—ä¸ºmyjenkinsã€‚
+dockerç«¯å£æ˜ å°„ï¼š <code>-p IP:host_port:container_port</code>ï¼Œ -p 8088:8080 å°†dockeré‡Œçš„8080æ˜ å°„åˆ°hostä¸­çš„8088ã€‚
+ç¯å¢ƒå˜é‡ï¼š <code>--env name=value</code>ã€‚
+ç›®å½•æ˜ å°„ï¼š <code>-v localdir:dockerdir</code>, -v /home/USER_NAME/jenkins_home_docker:/var/jenkins_home  jenkinsci/jenkinså°†dockeré‡Œçš„JENKINS_HOME /var/jenkins_homeæ˜ å°„ä¸ºhostä¸­çš„/home/osboxes/jenkins_home_dockerã€‚
+è¿è¡Œçš„docker imageï¼š jenkinsci/jenkins
+-d: docker instanceå°†ä½œä¸ºdemonåœ¨åå°è¿è¡Œã€‚
+å¦‚æœæ˜¯java1.7åŠä»¥å‰ç‰ˆæœ¬ï¼Œç»„å¥½è®¾å®š--env  JAVA_OPTS=â€-Xmx8192m -XX:PermSize=256m -XX:MaxPermSize=1024mâ€, java1.8åçš„ç›´æ¥--env JAVA_OPTS="-Xmx8192m"ã€‚
  
-dockerÃüÁîĞĞ½âÊÍ£º
-dockerÊµÀıµÄÃû×Ö£º --name myjenkins£¬´ËdockerÊµÀıµÄÃû×ÖÎªmyjenkins¡£
-docker¶Ë¿ÚÓ³Éä£º -p IP:host_port:container_port£¬ -p 8088:8080 ½«dockerÀïµÄ8080Ó³Éäµ½hostÖĞµÄ8088¡£
-»·¾³±äÁ¿£º --env name=value¡£
-Ä¿Â¼Ó³Éä£º -v localdir:dockerdir, -v /home/osboxes/jenkins_home_docker:/var/jenkins_home  jenkinsci/jenkins½«dockerÀïµÄJENKINS_HOME /var/jenkins_homeÓ³ÉäÎªhostÖĞµÄ/home/osboxes/jenkins_home_docker¡£
-ÔËĞĞµÄdocker image£º jenkinsci/jenkins
--d: docker instance½«×÷ÎªdemonÔÚºóÌ¨ÔËĞĞ¡£
-Èç¹ûÊÇjava1.7¼°ÒÔÇ°°æ±¾£¬×éºÃÉè¶¨--env  JAVA_OPTS=¡±-Xmx8192m -XX:PermSize=256m -XX:MaxPermSize=1024m¡±, java1.8ºóµÄÖ±½Ó--env JAVA_OPTS="-Xmx8192m"¡£
- 
-¼ì²éjenkins dockerÊÇ·ñÔËĞĞ£º
-sudo docker ps
+æ£€æŸ¥jenkins dockeræ˜¯å¦è¿è¡Œï¼š
+<pre><code>sudo docker ps</code></pre>
 CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
 14fc572bc91c jenkinsci/jenkins "/bin/tini -- /usr/lo" 18 hours ago Up 18 hours 0.0.0.0:50000->50000/tcp, 0.0.0.0:8088->8080/tcp myjenkins
