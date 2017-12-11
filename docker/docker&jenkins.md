@@ -1,7 +1,7 @@
 ### 1.下载jenkins docker image
 在hub.docker.com（https://hub.docker.com/r/jenkinsci/jenkins/）上可以看到jenkins的image的下载方法。
 在命令行执行如下命令将下载jenkins的image：
-sudo docker pull jenkinsci/jenkins
+<pre><code>sudo docker pull jenkinsci/jenkins</code></pre>
  
 ### 2.运行jenkins docker
 创建jenkins_home
